@@ -1,25 +1,46 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Item from './Item';
+import searchNews from './SearchNews';
+
+
+
+
 
 function App() {
+  const [query, setQuery] = React.useState("docker");
+  const [list, setList] = React.useState(null);
+
+  const search = (e) => {
+    e.preventDefault();
+    searchNews(query).then(setList);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+
+      <form onSubmit={search}>
+        <input
+          autoFocus
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+        />
+        <button>Search</button>
+      </form>
+
+      {!list
+        ? null
+        : list.length === 0
+          ? <p><i>No results</i></p>
+          : <ul>
+            {list.map((item, i) => (
+              <Item key={i} item={item} />
+            ))}
+          </ul>
+      }
     </div>
   );
 }
+
 
 export default App;
